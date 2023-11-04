@@ -30,7 +30,7 @@ export class LoginScriptProcessor extends SessionMiddleware {
 
     // 特殊脚本语法
     private readonly CUSTOM_SCRIPT_REGEXP: Map<string, RegExp> = new Map([
-        [ "TOTP", /^\$\{\{TOTP:(?<secret>.*?)\}\}$/ ]
+        [ "TOTP", /^\$\{\{TOTP::(?<secret>.*?)\}\}$/ ]
     ]);
 
     constructor (

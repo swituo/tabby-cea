@@ -14,7 +14,7 @@ tabby terminal
 登录脚本语法
 
 ```
-${{TOTP:"secret key"}}
+${{TOTP::Secret_Key}}
 ```
 
 TOTP算法配置
