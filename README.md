@@ -13,7 +13,7 @@ tabby terminal
 
 登录脚本语法
 
-```json
+```
 ${{TOTP:"secret key"}}
 ```
 
