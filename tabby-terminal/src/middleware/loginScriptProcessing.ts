@@ -1,6 +1,7 @@
 import deepClone from 'clone-deep'
 import { Logger } from 'tabby-core'
 import { SessionMiddleware } from '../api/middleware'
+import totp from "totp-generator";
 
 export interface LoginScript {
     expect: string
@@ -27,6 +28,11 @@ export class LoginScriptProcessor extends SessionMiddleware {
         v: '\x0b',
     }
 
+    // 特殊脚本语法
+    private readonly CUSTOM_SCRIPT_REGEXP: Map<string, RegExp> = new Map([
+        [ "TOTP", /^\$\{\{TOTP:(?<secret>.*?)\}\}$/ ]
+    ]);
+
     constructor (
         private logger: Logger,
         options: LoginScriptsOptions,
@@ -40,6 +46,30 @@ export class LoginScriptProcessor extends SessionMiddleware {
             script.send = this.unescape(script.send)
         }
     }
+
+
+    // 执行自定义脚本
+    parseCustomScriptSend (sendText: string): string | null {
+        if (sendText) {
+            let parseResult : string | null = null;
+            for (let item of this.CUSTOM_SCRIPT_REGEXP.entries()) {
+                const matcher = sendText.match(item[1]);
+                if (matcher) {
+                    switch (item[0]) {
+                        case "TOTP":
+                            parseResult = matcher.groups ? totp(matcher.groups["secret"]) : null;
+                            break;
+                    }
+                }
+                if (parseResult) {
+                    break;
+                }
+            }
+            return parseResult;
+        }
+        return null;
+    }
+
 
     feedFromSession (data: Buffer): void {
         const dataString = data.toString()
@@ -57,8 +87,12 @@ export class LoginScriptProcessor extends SessionMiddleware {
             }
 
             if (match) {
+                // 自定义脚本
+                const customSend = this.parseCustomScriptSend(script.send);
+                const sendContent = customSend ? customSend : script.send;
                 this.logger.info('Executing script:', script)
-                this.outputToSession.next(Buffer.from(script.send + '\n'))
+                // this.outputToSession.next(Buffer.from(script.send + '\n'))
+                this.outputToSession.next(Buffer.from(sendContent + '\n'))
                 this.remainingScripts = this.remainingScripts.filter(x => x !== script)
             } else {
                 if (script.optional) {
@@ -76,8 +110,12 @@ export class LoginScriptProcessor extends SessionMiddleware {
     executeUnconditionalScripts (): void {
         for (const script of this.remainingScripts) {
             if (!script.expect) {
+                // 自定义脚本
+                const customSend = this.parseCustomScriptSend(script.send);
+                const sendContent = customSend ? customSend : script.send;
                 this.logger.info('Executing script:', script.send)
-                this.outputToSession.next(Buffer.from(script.send + '\n'))
+                // this.outputToSession.next(Buffer.from(script.send + '\n'))
+                this.outputToSession.next(Buffer.from(sendContent + '\n'));
                 this.remainingScripts = this.remainingScripts.filter(x => x !== script)
             } else {
                 break
