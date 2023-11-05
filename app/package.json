@@ -1,14 +1,14 @@
 {
   "name": "tabby",
-  "description": "A terminal for a modern age",
+  "description": "tabby terminal ( + Custom Elaborate Additional )",
   "private": true,
-  "repository": "https://github.com/Eugeny/tabby",
+  "repository": "https://github.com/swituo/tabby-cea",
   "author": {
-    "name": "Eugene Pankov",
-    "email": "e@ajenti.org"
+    "name": "...",
+    "email": "swituo@gmail.com"
   },
   "main": "dist/main.js",
-  "version": "1.0.0-alpha.1",
+  "version": "0.0.0-cea",
   "scripts": {
     "postinstall": "patch-package",
     "build": "webpack --progress --color --display-modules",

@@ -28,6 +28,7 @@ TOTP算法配置
 
 * [electron-builder.yml](electron-builder.yml)
 * [package.json](package.json)
+* [.env](.env)
 * script
   * [vars.mjs](scripts/vars.mjs)
 * tabby-terminal
