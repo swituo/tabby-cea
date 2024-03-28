@@ -97,7 +97,7 @@ export class BaseTerminalTabComponent<P extends BaseTerminalProfile> extends Bas
     profile: P
 
     /**
-     * Enables normall passthrough from session output to terminal input
+     * Enables normal passthrough from session output to terminal input
      */
     enablePassthrough = true
 
@@ -290,7 +290,7 @@ export class BaseTerminalTabComponent<P extends BaseTerminalProfile> extends Bas
                     break
                 case 'delete-previous-word':
                     this.forEachFocusedTerminalPane(tab => {
-                        tab.sendInput('\x1b\x7f')
+                        tab.sendInput('\u0017')
                     })
                     break
                 case 'delete-next-word':

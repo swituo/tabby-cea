@@ -14,7 +14,8 @@ export let version = childProcess.execSync('git describe --tags', { encoding:'ut
 version = version.substring(1).trim()
 version = version.replace('-', '-c')
 
-if (version.includes('-c')) {
+// 自定义版本 v_._.___+
+if (version.includes('-c') || version.substring(version.length-1) == "+") {
     // version = semver.inc(version, 'prepatch').replace('-0', `-nightly.${process.env.REV ?? 0}`)
     version = semver.valid(semver.coerce(version)) + "-cea-" + ( process.env.VER_CEA_COUNTER ? process.env.VER_CEA_COUNTER.padStart(3, "0") : "001" );
 }

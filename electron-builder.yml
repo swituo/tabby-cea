@@ -76,8 +76,6 @@ snap:
   - system-observe
 deb:
   depends:
-  - gconf2
-  - gconf-service
   - gnome-keyring
   - libnotify4
   - libsecret-1-0
@@ -102,4 +100,4 @@ rpm:
 
 
 electronDownload:
-  mirror: https://npm.taobao.org/mirrors/electron/
+  mirror: https://npmmirror.com/mirrors/electron/
